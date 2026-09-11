@@ -30,6 +30,24 @@ Claude 桌面版的防护分三层，逐层都有对应解法：
 > 灵感与参考：[javaht/claude-desktop-zh-cn](https://github.com/javaht/claude-desktop-zh-cn)
 > （中文本地化项目，其 Windows 完整模式给出了 exe 内嵌哈希改写的思路）。
 
+## 两种模式，先读这段再选
+
+**⚠️ 重要权衡（亲测踩坑）**：Cowork 工作区服务会对客户端 `claude.exe` 做
+**Authenticode 签名校验**（服务日志 `Client signature verified`）。只要改过 exe
+（哪怕只是同步 asar 哈希），签名即变为 `HashMismatch`，服务端将**永久拒绝**该客户端——
+表现为：工作区报 `Failed to start Claude's workspace / RPC pipe closed`，
+工作区里跑的技能（如 PPT 解析）全部失效，且 UI 重试连接不断刷屏。
+
+因此：
+
+| 模式 | 命令 | 主题效果 | 工作区/PPT |
+|---|---|---|---|
+| **轻量模式（推荐）** | `scripts/apply-ion-theme.ps1` | 系统深色时显示壁纸 | ✅ 完好 |
+| 完整模式（进阶） | `install.ps1` | 任意系统主题下强制深色+壁纸 | ❌ 不可用 |
+
+日常使用**选轻量模式**即可：把 Windows 切到深色（设置 → 个性化 → 颜色），
+Claude 自动深色 + 壁纸；切回浅色则一切如常。
+
 ## 环境要求
 
 - Windows 10/11，Claude 桌面版（`Get-AppxPackage Claude` 能查到）
@@ -89,14 +107,14 @@ powershell -ExecutionPolicy Bypass -File .\restore.ps1
 
 ```
 dress-your-agent/
-├── install.ps1          # 一键安装（备份→解包→打补丁→重打包→改哈希→ion-dist注入→部署）
-├── restore.ps1          # 一键还原
+├── install.ps1               # 完整模式（含 exe 哈希改写，注意工作区权衡）
+├── restore.ps1               # 完整模式的一键还原
 ├── scripts/
-│   ├── asar-patch.js    # asar 内容补丁：强制深色钩子 + 主窗口壁纸样式
-│   └── theme-remote.css # 运行时注入的透明化样式
-│                        # （ion-dist 追加的壁纸/浮层样式内联在 install.ps1 第 7 步）
-├── wallpaper.jpg        # ← 你的壁纸放这里（自行添加）
-├── docs/screenshot.png  # 效果截图（自行添加）
+│   ├── apply-ion-theme.ps1   # 轻量模式（推荐）：仅注入 ion-dist 主题
+│   ├── asar-patch.js         # 完整模式用：asar 内容补丁（强制深色钩子等）
+│   └── theme-remote.css      # 完整模式用：运行时透明化样式
+├── wallpaper.jpg             # ← 你的壁纸放这里（自行添加）
+├── docs/screenshot.png       # 效果截图（自行添加）
 └── README.md
 ```
 
