@@ -100,6 +100,7 @@ powershell -ExecutionPolicy Bypass -File .\restore.ps1
 |---|---|---|
 | 启动秒退，日志报 `Failed to read header size from …app.asar` | asar 被清零/损坏（常见于杀软"处理"了被修改的文件，或更新中途中断） | 重跑 `install.ps1` |
 | Claude 自动更新后主题消失 | 更新覆盖了全部官方文件，属预期行为 | 重跑 `install.ps1`（新版本同样适用） |
+| **注入样式后看不到壁纸** | **应用缓存了旧的样式表**（ion-dist 的 CSS 会被磁盘缓存） | 关闭 Claude，删除 `%LOCALAPPDATA%\Claude-3p\Cache` 和 `Code Cache`，再启动 |
 | 杀软把 app.asar 清零 | 厂商签名校验失败被判定为篡改 | 杀软信任区加入 `C:\Program Files\WindowsApps\Claude_*`；或重跑脚本 |
 | 想换图标？ | **不要**改安装目录里的任何文件！只改快捷方式的"属性 → 更改图标" | —— |
 
