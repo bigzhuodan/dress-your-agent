@@ -1,0 +1,13 @@
+# 个人壁纸不入库（请用户自行添加）
+wallpaper.jpg
+wallpaper.png
+docs/screenshot.png
+docs/screenshot*.png
+
+# 工作产物
+*.asar
+*.asar.new
+app.asar.new/
+claude.exe.new/
+*_work/
+node_modules/

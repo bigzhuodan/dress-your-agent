@@ -1,0 +1,8 @@
+/* dress-your-agent runtime injection (dark only) */
+html[data-mode="dark"] body, html.dark body, html[data-theme="dark"] body {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+html[data-mode="dark"] #root, html[data-mode="dark"] [id*="root"], html[data-mode="dark"] main {
+  background: transparent !important;
+}
