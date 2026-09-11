@@ -1,0 +1,47 @@
+/* ============================================================
+   dress-your-agent — ion-dist 主题样式（由 install/apply 脚本追加）
+   仅深色模式生效；壁纸文件名/遮罩浓度由脚本参数控制
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  html {
+    --cds-surface-0: transparent !important;
+    --cds-surface-1: transparent !important;
+    --cds-surface-2: transparent !important;
+    --cds-surface-3: transparent !important;
+    --cds-page-bg: transparent !important;
+    --background-color-page: transparent !important;
+    --epitaxy-transcript-surface: transparent !important;
+    --panel-card-surface: transparent !important;
+    --df-sidebar-bg: transparent !important;
+    --df-web-sidebar-bg: transparent !important;
+  }
+  html[data-mode="dark"] body, html.dark body {
+    background: linear-gradient(rgba(10,12,18,.45), rgba(10,12,18,.45)),
+                url("/assets/v1/bg-custom.jpg") center/cover no-repeat fixed !important;
+  }
+  html[data-mode="dark"] .bg-surface-1,
+  html[data-mode="dark"] .bg-surface-2,
+  html[data-mode="dark"] .dframe-sidebar,
+  html[data-mode="dark"] .rounded-card { background-color: transparent !important; }
+  html[data-mode="dark"] [role="menu"], html[data-mode="dark"] [role="dialog"],
+  html[data-mode="dark"] [role="listbox"], html[data-mode="dark"] [role="tooltip"],
+  html[data-mode="dark"] [data-radix-popper-content-wrapper] > *,
+  html[data-mode="dark"] .shadow-panel, html[data-mode="dark"] .shadow-panel-sm,
+  html[data-mode="dark"] .shadow-lg, html[data-mode="dark"] .shadow-md {
+    background-color: rgba(22,22,25,.96) !important;
+    background-image: none !important;
+    backdrop-filter: blur(8px) !important;
+  }
+  html[data-mode="dark"] .scroll-fade-strip-top, html[data-mode="dark"] .scroll-fade-strip-bottom,
+  html[data-mode="dark"] .scroll-fade-strip-left, html[data-mode="dark"] .scroll-fade-strip-right {
+    display: none !important; background: none !important;
+  }
+  /* v6: 主区域容器透明（否则正文区仍是纯深色） */
+  html[data-mode="dark"] div.grid.w-full { background: transparent !important; }
+  html[data-mode="dark"] div.pointer-events-none.absolute.inset-0 { background: transparent !important; }
+  html[data-mode="dark"] main,
+  html[data-mode="dark"] main > *,
+  html[data-mode="dark"] main > * > *,
+  html[data-mode="dark"] [role="main"],
+  html[data-mode="dark"] .epitaxy-root > div { background-color: transparent !important; }
+}
