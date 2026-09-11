@@ -45,45 +45,9 @@ Copy-Item $WallpaperPath (Join-Path $v1 $ImgName) -Force
 
 $css = Get-Content $cssFile.FullName -Raw
 if ($css -notmatch 'dress-your-agent') {
-    $block = @'
-
-/* ====== dress-your-agent: wallpaper theme (dark only) ====== */
-@media (prefers-color-scheme: dark) {
-  html {
-    --cds-surface-0: transparent !important;
-    --cds-surface-1: transparent !important;
-    --cds-surface-2: transparent !important;
-    --cds-page-bg: transparent !important;
-    --background-color-page: transparent !important;
-    --epitaxy-transcript-surface: transparent !important;
-    --panel-card-surface: transparent !important;
-    --df-sidebar-bg: transparent !important;
-    --df-web-sidebar-bg: transparent !important;
-  }
-  html[data-mode="dark"] body, html.dark body {
-    background: linear-gradient(rgba(10,12,18,OV), rgba(10,12,18,OV)),
-                url("/assets/v1/IMG") center/cover no-repeat fixed !important;
-  }
-  html[data-mode="dark"] .bg-surface-1,
-  html[data-mode="dark"] .bg-surface-2,
-  html[data-mode="dark"] .dframe-sidebar,
-  html[data-mode="dark"] .rounded-card { background-color: transparent !important; }
-  html[data-mode="dark"] [role="menu"], html[data-mode="dark"] [role="dialog"],
-  html[data-mode="dark"] [role="listbox"], html[data-mode="dark"] [role="tooltip"],
-  html[data-mode="dark"] [data-radix-popper-content-wrapper] > *,
-  html[data-mode="dark"] .shadow-panel, html[data-mode="dark"] .shadow-panel-sm,
-  html[data-mode="dark"] .shadow-lg, html[data-mode="dark"] .shadow-md {
-    background-color: rgba(22,22,25,.96) !important;
-    background-image: none !important;
-    backdrop-filter: blur(8px) !important;
-  }
-  html[data-mode="dark"] .scroll-fade-strip-top, html[data-mode="dark"] .scroll-fade-strip-bottom,
-  html[data-mode="dark"] .scroll-fade-strip-left, html[data-mode="dark"] .scroll-fade-strip-right {
-    display: none !important; background: none !important;
-  }
-}
-'@
-    $block = $block.Replace("OV", [string]$OverlayAlpha).Replace("IMG", $ImgName)
+    $block = Get-Content (Join-Path $PSScriptRoot "theme-ion.css") -Raw
+    $block = $block.Replace("rgba(10,12,18,.45)", "rgba(10,12,18,$OverlayAlpha)")
+    $block = $block.Replace("/assets/v1/bg-custom.jpg", "/assets/v1/$ImgName")
     Add-Content -Path $cssFile.FullName -Value $block -Encoding UTF8
 } else {
     Write-Host "样式已存在，跳过（如需更新遮罩浓度请先还原再注入）"
