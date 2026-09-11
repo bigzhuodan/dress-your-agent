@@ -32,21 +32,29 @@ Claude 桌面版的防护分三层，逐层都有对应解法：
 
 ## 两种模式，先读这段再选
 
-**⚠️ 重要权衡（亲测踩坑）**：Cowork 工作区服务会对客户端 `claude.exe` 做
-**Authenticode 签名校验**（服务日志 `Client signature verified`）。只要改过 exe
-（哪怕只是同步 asar 哈希），签名即变为 `HashMismatch`，服务端将**永久拒绝**该客户端——
-表现为：工作区报 `Failed to start Claude's workspace / RPC pipe closed`，
-工作区里跑的技能（如 PPT 解析）全部失效，且 UI 重试连接不断刷屏。
+**🎉 好消息（2026-09 实测）**：新版 Claude 桌面版（1.52386+）**自带独立的主题设置**
+（设置里的外观选项，配置持久化在 `%LOCALAPPDATA%\Claude-3p\config.json` 的
+`"userThemeMode": "dark"`）。也就是说：
 
-因此：
+> **在 Claude 界面里把主题调成深色，系统保持浅色，壁纸照常生效。**
+> 轻量模式 + 新版自带设置 = 完整效果，**完全不需要改 exe**！
+
+**⚠️ 历史坑位（旧版本才需要看）**：旧版 Claude 没有Independent主题设置，
+社区方案是改 exe 内嵌哈希同步 asar。但实测发现：exe 被修改后（签名变
+`HashMismatch`），**Cowork 工作区服务会拒绝该客户端**（服务日志
+`Client signature verified` 不再出现），表现为工作区报
+`Failed to start Claude's workspace / RPC pipe closed`，工作区内技能（如
+PPT 解析）全部失效。且该问题**与杀软无关**，还原官方文件后立即消失。
 
 | 模式 | 命令 | 主题效果 | 工作区/PPT |
 |---|---|---|---|
-| **轻量模式（推荐）** | `scripts/apply-ion-theme.ps1` | 系统深色时显示壁纸 | ✅ 完好 |
-| 完整模式（进阶） | `install.ps1` | 任意系统主题下强制深色+壁纸 | ❌ 不可用 |
+| **轻量模式（强烈推荐）** | `scripts/apply-ion-theme.ps1` | Claude 内置深色设置 + 壁纸 | ✅ 完好 |
+| 完整模式（仅旧版 Claude，不推荐） | `install.ps1` | 强制深色+壁纸 | ❌ 不可用 |
 
-日常使用**选轻量模式**即可：把 Windows 切到深色（设置 → 个性化 → 颜色），
-Claude 自动深色 + 壁纸；切回浅色则一切如常。
+日常使用**选轻量模式**：
+1. 跑 `scripts/apply-ion-theme.ps1` 注入样式（UAC 一次）
+2. 在 Claude 界面里把主题调成深色（新版本自带）
+3. 若注入后看不到壁纸 → 清缓存（见常见问题）
 
 ## 环境要求
 
